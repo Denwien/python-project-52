@@ -1,0 +1,8 @@
+msgid "Home"
+msgstr "Главная"
+
+msgid "My App"
+msgstr "Моё приложение"
+
+msgid "Welcome"
+msgstr "Добро пожаловать"
