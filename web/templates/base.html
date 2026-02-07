@@ -1,9 +1,9 @@
-{% load i18n django_bootstrap5 %}
+{% load django_bootstrap5 %}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>{% trans "Home" %}</title>
+  <title>{% block title %}My App{% endblock %}</title>
   {% bootstrap_css %}
   {% bootstrap_javascript %}
 </head>
@@ -11,12 +11,12 @@
 
 <nav class="navbar navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="/">{% trans "My App" %}</a>
+    <a class="navbar-brand" href="/">My App</a>
   </div>
 </nav>
 
 <div class="container mt-4">
-  <h1>{% trans "Welcome" %}</h1>
+  {% block content %}{% endblock %}
 </div>
 
 </body>
