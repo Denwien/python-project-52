@@ -1,36 +1,38 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+from .models import Status
 
 
-class UserCRUDTest(TestCase):
+class StatusCRUDTest(TestCase):
 
-    def test_create_user(self):
-        response = self.client.post(reverse('user_create'), {
-            'username': 'newuser',
-            'password1': 'StrongPass123!',
-            'password2': 'StrongPass123!',
-        })
-        self.assertRedirects(response, reverse('login'))
-        self.assertTrue(User.objects.filter(username='newuser').exists())
-
-    def test_update_user(self):
-        user = User.objects.create_user(username='test', password='Test12345!')
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='test', password='Test12345!'
+        )
         self.client.login(username='test', password='Test12345!')
 
+    def test_create_status(self):
+        response = self.client.post(reverse('status_create'), {
+            'name': 'New',
+        })
+        self.assertRedirects(response, reverse('statuses'))
+        self.assertTrue(Status.objects.filter(name='New').exists())
+
+    def test_update_status(self):
+        status = Status.objects.create(name='Old')
         response = self.client.post(
-            reverse('user_update', args=[user.id]),
-            {'username': 'updated'}
+            reverse('status_update', args=[status.id]),
+            {'name': 'Updated'}
         )
+        self.assertRedirects(response, reverse('statuses'))
+        status.refresh_from_db()
+        self.assertEqual(status.name, 'Updated')
 
-        self.assertRedirects(response, reverse('users'))
-        user.refresh_from_db()
-        self.assertEqual(user.username, 'updated')
-
-    def test_delete_user(self):
-        user = User.objects.create_user(username='delete', password='Test12345!')
-        self.client.login(username='delete', password='Test12345!')
-
-        response = self.client.post(reverse('user_delete', args=[user.id]))
-        self.assertRedirects(response, reverse('users'))
-        self.assertFalse(User.objects.filter(username='delete').exists())
+    def test_delete_status(self):
+        status = Status.objects.create(name='To delete')
+        response = self.client.post(
+            reverse('status_delete', args=[status.id])
+        )
+        self.assertRedirects(response, reverse('statuses'))
+        self.assertFalse(Status.objects.filter(id=status.id).exists())

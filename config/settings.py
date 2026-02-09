@@ -16,7 +16,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'django_bootstrap5',
     'web',
 ]
@@ -64,9 +63,12 @@ LANGUAGE_CODE = 'en'
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
+
 USE_TZ = True
 
 STATIC_URL = 'static/'
+
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
