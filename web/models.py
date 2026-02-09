@@ -10,6 +10,14 @@ class Status(models.Model):
         return self.name
 
 
+class Label(models.Model):
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Task(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -29,6 +37,11 @@ class Task(models.Model):
         null=True,
         blank=True,
         related_name="executed_tasks",
+    )
+    labels = models.ManyToManyField(
+        Label,
+        blank=True,
+        related_name="tasks",
     )
     created_at = models.DateTimeField(auto_now_add=True)
 

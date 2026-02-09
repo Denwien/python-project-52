@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
@@ -10,7 +11,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .models import Status, Task
+from .models import Status, Task, Label
 
 
 def index(request):
@@ -120,5 +121,59 @@ class TaskDeleteView(
         messages.success(
             self.request,
             "Task deleted successfully",
+        )
+        return super().delete(request, *args, **kwargs)
+
+
+class LabelListView(LoginRequiredMixin, ListView):
+    model = Label
+    template_name = "labels/index.html"
+    context_object_name = "labels"
+
+
+class LabelCreateView(LoginRequiredMixin, CreateView):
+    model = Label
+    fields = ["name"]
+    template_name = "labels/create.html"
+    success_url = reverse_lazy("labels")
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "Label created successfully",
+        )
+        return super().form_valid(form)
+
+
+class LabelUpdateView(LoginRequiredMixin, UpdateView):
+    model = Label
+    fields = ["name"]
+    template_name = "labels/update.html"
+    success_url = reverse_lazy("labels")
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "Label updated successfully",
+        )
+        return super().form_valid(form)
+
+
+class LabelDeleteView(LoginRequiredMixin, DeleteView):
+    model = Label
+    template_name = "labels/delete.html"
+    success_url = reverse_lazy("labels")
+
+    def delete(self, request, *args, **kwargs):
+        label = self.get_object()
+        if label.tasks.exists():
+            messages.error(
+                request,
+                "Cannot delete label with tasks",
+            )
+            return redirect("labels")
+        messages.success(
+            request,
+            "Label deleted successfully",
         )
         return super().delete(request, *args, **kwargs)

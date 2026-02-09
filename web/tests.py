@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Status, Task
+from .models import Status, Task, Label
 
 
 class StatusCRUDTest(TestCase):
@@ -124,4 +124,53 @@ class TaskCRUDTest(TestCase):
         )
         self.assertFalse(
             Task.objects.filter(id=task.id).exists(),
+        )
+
+
+class LabelCRUDTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="label",
+            password="Test12345!",
+        )
+        self.client.login(
+            username="label",
+            password="Test12345!",
+        )
+
+    def test_create_label(self):
+        response = self.client.post(
+            reverse("label_create"),
+            {"name": "Bug"},
+        )
+        self.assertRedirects(
+            response,
+            reverse("labels"),
+        )
+        self.assertTrue(
+            Label.objects.filter(name="Bug").exists(),
+        )
+
+    def test_update_label(self):
+        label = Label.objects.create(name="Old")
+        response = self.client.post(
+            reverse("label_update", args=[label.id]),
+            {"name": "New"},
+        )
+        self.assertRedirects(
+            response,
+            reverse("labels"),
+        )
+
+    def test_delete_label(self):
+        label = Label.objects.create(name="Temp")
+        response = self.client.post(
+            reverse("label_delete", args=[label.id]),
+        )
+        self.assertRedirects(
+            response,
+            reverse("labels"),
+        )
+        self.assertFalse(
+            Label.objects.filter(id=label.id).exists(),
         )

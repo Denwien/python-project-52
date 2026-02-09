@@ -6,6 +6,10 @@ from .views import (
     StatusDeleteView,
     StatusListView,
     StatusUpdateView,
+    LabelListView,
+    LabelCreateView,
+    LabelUpdateView,
+    LabelDeleteView,
     TaskCreateView,
     TaskDeleteView,
     TaskDetailView,
@@ -15,6 +19,10 @@ from .views import (
 )
 
 urlpatterns = [
+    path("labels/", LabelListView.as_view(), name="labels"),
+    path("labels/create/", LabelCreateView.as_view(), name="label_create"),
+    path("labels/<int:pk>/update/", LabelUpdateView.as_view(), name="label_update"),
+    path("labels/<int:pk>/delete/", LabelDeleteView.as_view(), name="label_delete"),
     path("", index, name="index"),
     path(
         "login/",
