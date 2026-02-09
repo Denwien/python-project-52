@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Statuses</h1>
+
 <a href="{% url 'status_create' %}">Create</a>
+
 <ul>
   {% for status in statuses %}
     <li>

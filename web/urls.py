@@ -6,41 +6,71 @@ from .views import (
     StatusDeleteView,
     StatusListView,
     StatusUpdateView,
+    TaskCreateView,
+    TaskDeleteView,
+    TaskDetailView,
+    TaskListView,
+    TaskUpdateView,
     index,
 )
 
 urlpatterns = [
-    path('', index, name='index'),
+    path("", index, name="index"),
     path(
-        'login/',
+        "login/",
         auth_views.LoginView.as_view(
-            template_name='auth/login.html',
+            template_name="auth/login.html",
         ),
-        name='login',
+        name="login",
     ),
     path(
-        'logout/',
+        "logout/",
         auth_views.LogoutView.as_view(),
-        name='logout',
+        name="logout",
     ),
     path(
-        'statuses/',
+        "statuses/",
         StatusListView.as_view(),
-        name='statuses',
+        name="statuses",
     ),
     path(
-        'statuses/create/',
+        "statuses/create/",
         StatusCreateView.as_view(),
-        name='status_create',
+        name="status_create",
     ),
     path(
-        'statuses/<int:pk>/update/',
+        "statuses/<int:pk>/update/",
         StatusUpdateView.as_view(),
-        name='status_update',
+        name="status_update",
     ),
     path(
-        'statuses/<int:pk>/delete/',
+        "statuses/<int:pk>/delete/",
         StatusDeleteView.as_view(),
-        name='status_delete',
+        name="status_delete",
+    ),
+    path(
+        "tasks/",
+        TaskListView.as_view(),
+        name="tasks",
+    ),
+    path(
+        "tasks/create/",
+        TaskCreateView.as_view(),
+        name="task_create",
+    ),
+    path(
+        "tasks/<int:pk>/update/",
+        TaskUpdateView.as_view(),
+        name="task_update",
+    ),
+    path(
+        "tasks/<int:pk>/delete/",
+        TaskDeleteView.as_view(),
+        name="task_delete",
+    ),
+    path(
+        "tasks/<int:pk>/",
+        TaskDetailView.as_view(),
+        name="task_detail",
     ),
 ]

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ object.name }}</h1>
+
+<p>{{ object.description }}</p>
+<p>Status: {{ object.status }}</p>
+<p>Author: {{ object.author }}</p>
+<p>Executor: {{ object.executor }}</p>
+
+<a href="{% url 'task_update' object.id %}">Edit</a>
+
+{% if object.author == user %}
+  <a href="{% url 'task_delete' object.id %}">Delete</a>
+{% endif %}
+{% endblock %}
