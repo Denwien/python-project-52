@@ -174,3 +174,51 @@ class LabelCRUDTest(TestCase):
         self.assertFalse(
             Label.objects.filter(id=label.id).exists(),
         )
+
+
+class TaskFilterTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="filteruser",
+            password="Test12345!",
+        )
+        self.other = User.objects.create_user(
+            username="other",
+            password="Test12345!",
+        )
+        self.status = Status.objects.create(name="new")
+        self.label = Label.objects.create(name="bug")
+
+        self.task1 = Task.objects.create(
+            name="My task",
+            status=self.status,
+            author=self.user,
+        )
+        self.task1.labels.add(self.label)
+
+        self.task2 = Task.objects.create(
+            name="Other task",
+            status=self.status,
+            author=self.other,
+        )
+
+        self.client.login(
+            username="filteruser",
+            password="Test12345!",
+        )
+
+    def test_filter_only_self_tasks(self):
+        response = self.client.get(
+            reverse("tasks"),
+            {"self_tasks": "on"},
+        )
+        self.assertContains(response, "My task")
+        self.assertNotContains(response, "Other task")
+
+    def test_filter_by_label(self):
+        response = self.client.get(
+            reverse("tasks"),
+            {"labels": self.label.id},
+        )
+        self.assertContains(response, "My task")
+        self.assertNotContains(response, "Other task")

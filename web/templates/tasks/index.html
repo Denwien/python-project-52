@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
+<form method="get">
+  {{ filter.form.as_p }}
+  <button type="submit">Show</button>
+</form>
+<hr>
+
 <h1>Tasks</h1>
 
 <a href="{% url 'task_create' %}">Create task</a>

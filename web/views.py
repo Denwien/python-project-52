@@ -1,7 +1,8 @@
-from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -11,11 +12,17 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .models import Status, Task, Label
+from django_filters.views import FilterView
+
+from .filters import TaskFilter
+from .models import Label, Status, Task
 
 
 def index(request):
     return render(request, "index.html")
+
+
+# ===== STATUSES =====
 
 
 class StatusListView(LoginRequiredMixin, ListView):
@@ -31,10 +38,7 @@ class StatusCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("statuses")
 
     def form_valid(self, form):
-        messages.success(
-            self.request,
-            "Status created successfully",
-        )
+        messages.success(self.request, "Status created successfully")
         return super().form_valid(form)
 
 
@@ -45,10 +49,7 @@ class StatusUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("statuses")
 
     def form_valid(self, form):
-        messages.success(
-            self.request,
-            "Status updated successfully",
-        )
+        messages.success(self.request, "Status updated successfully")
         return super().form_valid(form)
 
 
@@ -58,22 +59,31 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("statuses")
 
     def delete(self, request, *args, **kwargs):
-        messages.success(
-            self.request,
-            "Status deleted successfully",
-        )
+        messages.success(self.request, "Status deleted successfully")
         return super().delete(request, *args, **kwargs)
 
 
-class TaskListView(LoginRequiredMixin, ListView):
+# ===== TASKS =====
+
+
+class TaskListView(LoginRequiredMixin, FilterView):
     model = Task
     template_name = "tasks/index.html"
     context_object_name = "tasks"
+    filterset_class = TaskFilter
+
+    def get_filterset(self, filterset_class):
+        return filterset_class(
+            data=self.request.GET or None,
+            queryset=self.get_queryset(),
+            request=self.request,
+        )
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task
     template_name = "tasks/detail.html"
+    context_object_name = "task"
 
 
 class TaskCreateView(LoginRequiredMixin, CreateView):
@@ -84,10 +94,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        messages.success(
-            self.request,
-            "Task created successfully",
-        )
+        messages.success(self.request, "Task created successfully")
         return super().form_valid(form)
 
 
@@ -98,10 +105,7 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("tasks")
 
     def form_valid(self, form):
-        messages.success(
-            self.request,
-            "Task updated successfully",
-        )
+        messages.success(self.request, "Task updated successfully")
         return super().form_valid(form)
 
 
@@ -118,11 +122,11 @@ class TaskDeleteView(
         return self.get_object().author == self.request.user
 
     def delete(self, request, *args, **kwargs):
-        messages.success(
-            self.request,
-            "Task deleted successfully",
-        )
+        messages.success(self.request, "Task deleted successfully")
         return super().delete(request, *args, **kwargs)
+
+
+# ===== LABELS =====
 
 
 class LabelListView(LoginRequiredMixin, ListView):
@@ -138,10 +142,7 @@ class LabelCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("labels")
 
     def form_valid(self, form):
-        messages.success(
-            self.request,
-            "Label created successfully",
-        )
+        messages.success(self.request, "Label created successfully")
         return super().form_valid(form)
 
 
@@ -152,10 +153,7 @@ class LabelUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("labels")
 
     def form_valid(self, form):
-        messages.success(
-            self.request,
-            "Label updated successfully",
-        )
+        messages.success(self.request, "Label updated successfully")
         return super().form_valid(form)
 
 
@@ -167,13 +165,18 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         label = self.get_object()
         if label.tasks.exists():
-            messages.error(
-                request,
-                "Cannot delete label with tasks",
-            )
+            messages.error(request, "Cannot delete label with tasks")
             return redirect("labels")
-        messages.success(
-            request,
-            "Label deleted successfully",
-        )
+        messages.success(request, "Label deleted successfully")
         return super().delete(request, *args, **kwargs)
+
+
+class UserCreateView(CreateView):
+    model = User
+    form_class = UserCreationForm
+    template_name = "users/create.html"
+    success_url = reverse_lazy("login")
+
+    def form_valid(self, form):
+        messages.success(self.request, "User created successfully")
+        return super().form_valid(form)
