@@ -1,3 +1,7 @@
+[project]
+name = "python-project-52"
+version = "0.1.0"
+
 [tool.ruff]
 line-length = 86
 exclude = [
