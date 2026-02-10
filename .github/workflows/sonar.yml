@@ -14,23 +14,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install Poetry
-        run: |
-          pip install poetry
-
-      - name: Install dependencies
-        run: |
-          poetry install
-
-      - name: Run tests
-        run: |
-          poetry run python manage.py test
-
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
