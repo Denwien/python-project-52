@@ -2,6 +2,13 @@
 name = "hexlet-code"
 version = "0.1.0"
 
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta:__legacy__"
+
+[tool.setuptools]
+packages = []
+
 [tool.ruff]
 line-length = 86
 exclude = [
