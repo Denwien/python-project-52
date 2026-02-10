@@ -1,20 +1,29 @@
-name: SonarCloud
+name: Python CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
-  sonarcloud:
+  sonar:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+        with:
+          args: >
+            -Dsonar.projectKey=Denwien_python-project-52
+            -Dsonar.organization=denwien
+            -Dsonar.sources=.
+            -Dsonar.exclusions=**/venv/**,**/migrations/**,**/__pycache__/**,**/tests/**,**/db.sqlite3
