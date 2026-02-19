@@ -13,5 +13,5 @@ collectstatic:
 	$(PYTHON) manage.py collectstatic --noinput
 
 test:
-	pytest -p no:pytest_dotenv -p no:pytest-dotenv
+	PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -p no:pytest_dotenv -p no:pytest-dotenv
 
