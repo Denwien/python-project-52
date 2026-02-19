@@ -1,13 +1,10 @@
+import os
 import sys
-import pluggy
 
-_original_register = pluggy.PluginManager.register
+os.environ.setdefault("PYTEST_DISABLE_PLUGIN_AUTOLOAD", "1")
 
-def _patched_register(self, plugin, name=None):
-    if name and "pytest_dotenv" in name.lower():
-        return None
-    if hasattr(plugin, "__name__") and "pytest_dotenv" in plugin.__name__.lower():
-        return None
-    return _original_register(self, plugin, name)
-
-pluggy.PluginManager.register = _patched_register
+def pytest_configure(config):
+    try:
+        config.pluginmanager.set_blocked("pytest_dotenv")
+    except Exception:
+        pass
