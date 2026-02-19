@@ -1,5 +1,7 @@
-def pytest_configure(config):
+import sys
+
+def pytest_load_initial_conftests(early_config, parser, args):
     try:
-        config.pluginmanager.set_blocked("pytest_dotenv")
+        early_config.pluginmanager.set_blocked("pytest_dotenv")
     except Exception:
         pass
