@@ -13,5 +13,5 @@ collectstatic:
 	$(PYTHON) manage.py collectstatic --noinput
 
 test:
-	pytest
+	pytest -p no:pytest_dotenv -p no:pytest-dotenv
 
