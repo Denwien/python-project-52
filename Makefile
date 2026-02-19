@@ -13,5 +13,5 @@ collectstatic:
 	$(PYTHON) manage.py collectstatic --noinput
 
 test:
-	PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -p no:pytest_dotenv -p no:pytest-dotenv
+	PYTHONPATH=. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -c "import pytest_plugin_blocker; import pytest; pytest.main(['-vv', 'tests', '-p', 'no:pytest_dotenv', '-p', 'no:pytest-dotenv'])"
 
