@@ -15,3 +15,12 @@ def pytest_addoption(parser, pluginmanager):
         pluginmanager.set_blocked("pytest-env")
     except Exception:
         pass
+
+def pytest_configure(config):
+    try:
+        config.pluginmanager.set_blocked("pytest_dotenv")
+        config.pluginmanager.set_blocked("pytest-dotenv")
+        config.pluginmanager.set_blocked("pytest_env")
+        config.pluginmanager.set_blocked("pytest-env")
+    except Exception:
+        pass

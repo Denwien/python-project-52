@@ -2,9 +2,11 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+project_root = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, project_root)
 
 os.environ.setdefault("PYTEST_DISABLE_PLUGIN_AUTOLOAD", "1")
+os.environ.setdefault("PYTHONSTARTUP", os.path.join(project_root, "pytest_plugin_blocker.py"))
 
 try:
     import pytest_plugin_blocker
