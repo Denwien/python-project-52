@@ -1,29 +1,27 @@
+"""
+Root conftest.py that applies plugin blocker patch before pytest loads plugins.
+"""
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
 os.environ.setdefault("PYTEST_DISABLE_PLUGIN_AUTOLOAD", "1")
 
+# Add code directory to path
+code_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "code")
+if code_dir not in sys.path:
+    sys.path.insert(0, code_dir)
+
+# Import and apply plugin blocker patch BEFORE pytest loads plugins
 try:
-    import pytest_plugin_blocker
+    from code import pytest_plugin_blocker
+except ImportError:
+    try:
+        import pytest_plugin_blocker
+    except ImportError:
+        pass
+
+# Also try to import early blocker
+try:
+    from code import pytest_early_blocker
 except ImportError:
     pass
-
-def pytest_load_initial_conftests(early_config, parser, args):
-    try:
-        early_config.pluginmanager.set_blocked("pytest_dotenv")
-        early_config.pluginmanager.set_blocked("pytest-dotenv")
-        early_config.pluginmanager.set_blocked("pytest_env")
-        early_config.pluginmanager.set_blocked("pytest-env")
-    except Exception:
-        pass
-
-def pytest_configure(config):
-    try:
-        config.pluginmanager.set_blocked("pytest_dotenv")
-        config.pluginmanager.set_blocked("pytest-dotenv")
-        config.pluginmanager.set_blocked("pytest_env")
-        config.pluginmanager.set_blocked("pytest-env")
-    except Exception:
-        pass
