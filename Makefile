@@ -13,5 +13,5 @@ collectstatic:
 	$(PYTHON) manage.py collectstatic --noinput
 
 test:
-	PYTHONSTARTUP=$$(pwd)/pytest_plugin_blocker.py PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run pytest -vv tests -p no:pytest_dotenv -p no:pytest-dotenv -p no:pytest_env -p no:pytest-env
+	PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run pytest -vv tests -p no:pytest_dotenv -p no:pytest-dotenv -p no:pytest_env -p no:pytest-env
 
