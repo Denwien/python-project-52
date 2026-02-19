@@ -1,5 +1,4 @@
-def pytest_addoption(parser):
-    pass
+import pytest_plugin_blocker
 
 def pytest_configure(config):
     try:
