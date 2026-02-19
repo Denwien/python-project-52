@@ -1,7 +1,13 @@
 import sys
+import pluggy
 
-def pytest_load_initial_conftests(early_config, parser, args):
-    try:
-        early_config.pluginmanager.set_blocked("pytest_dotenv")
-    except Exception:
-        pass
+_original_register = pluggy.PluginManager.register
+
+def _patched_register(self, plugin, name=None):
+    if name and "pytest_dotenv" in name.lower():
+        return None
+    if hasattr(plugin, "__name__") and "pytest_dotenv" in plugin.__name__.lower():
+        return None
+    return _original_register(self, plugin, name)
+
+pluggy.PluginManager.register = _patched_register
