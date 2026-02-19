@@ -41,7 +41,10 @@ else:
                     eps = entry_points().get(name, [])
                 for ep in eps:
                     ep_name_lower = ep.name.lower()
-                    if "pytest_dotenv" not in ep_name_lower and "pytest-dotenv" not in ep_name_lower:
+                    if ("pytest_dotenv" not in ep_name_lower and 
+                        "pytest-dotenv" not in ep_name_lower and
+                        "pytest_env" not in ep_name_lower and
+                        "pytest-env" not in ep_name_lower):
                         try:
                             plugin = ep.load()
                             self.register(plugin, name=ep.name)
