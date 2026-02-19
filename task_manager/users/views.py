@@ -1,0 +1,60 @@
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    ListView,
+    UpdateView,
+)
+
+
+class UserListView(ListView):
+    model = User
+    template_name = "users/index.html"
+    context_object_name = "users"
+
+
+class UserCreateView(CreateView):
+    model = User
+    form_class = UserCreationForm
+    template_name = "users/create.html"
+    success_url = reverse_lazy("login")
+
+    def form_valid(self, form):
+        messages.success(self.request, "User created successfully")
+        return super().form_valid(form)
+
+
+class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = User
+    form_class = UserCreationForm
+    template_name = "users/update.html"
+    success_url = reverse_lazy("users")
+
+    def test_func(self):
+        return self.get_object() == self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, "User updated successfully")
+        return super().form_valid(form)
+
+
+class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = User
+    template_name = "users/delete.html"
+    success_url = reverse_lazy("users")
+
+    def test_func(self):
+        user = self.get_object()
+        if user.authored_tasks.exists() or user.executed_tasks.exists():
+            messages.error(self.request, "Cannot delete user with tasks")
+            return False
+        return user == self.request.user
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "User deleted successfully")
+        return super().delete(request, *args, **kwargs)

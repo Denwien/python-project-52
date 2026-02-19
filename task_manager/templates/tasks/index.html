@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="get">
+  {{ filter.form.as_p }}
+  <button type="submit">Show</button>
+</form>
+<hr>
+
+<h1>Tasks</h1>
+
+<a href="{% url 'task_create' %}">Create task</a>
+
+<ul>
+  {% for task in tasks %}
+    <li>
+      <a href="{% url 'task_detail' task.id %}">
+        {{ task.name }}
+      </a>
+      ({{ task.status }})
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Labels</h1>
+
+<a href="{% url 'label_create' %}">Create</a>
+
+<ul>
+  {% for label in labels %}
+    <li>
+      {{ label.name }}
+      <a href="{% url 'label_update' label.id %}">Edit</a>
+      <a href="{% url 'label_delete' label.id %}">Delete</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

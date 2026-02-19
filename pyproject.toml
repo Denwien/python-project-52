@@ -30,10 +30,18 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["web", "config"]
+packages = ["task_manager", "config"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+ignore = ["E501"]
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "config.settings"
+DJANGO_SETTINGS_MODULE = "task_manager.settings"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
 addopts = "-p no:pytest_dotenv -p no:pytest-dotenv -p no:pytest_env -p no:pytest-env"
 pytest_plugins = ["code.pytest_plugin_blocker"]

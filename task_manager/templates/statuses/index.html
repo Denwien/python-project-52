@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Statuses</h1>
+
+<a href="{% url 'status_create' %}">Create</a>
+
+<ul>
+  {% for status in statuses %}
+    <li>
+      {{ status.name }}
+      <a href="{% url 'status_update' status.id %}">Edit</a>
+      <a href="{% url 'status_delete' status.id %}">Delete</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
