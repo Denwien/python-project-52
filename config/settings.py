@@ -1,12 +1,18 @@
+import os
 from pathlib import Path
+
+import dj_database_url
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "dev-secret-key"
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
 
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else ["webserver", "localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
     "django_extensions",
@@ -23,6 +29,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "rollbar.contrib.django.middleware.RollbarNotifierMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -53,10 +61,10 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
 }
 
 LANGUAGE_CODE = "en"
@@ -68,9 +76,16 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+ROLLBAR = {
+    "access_token": os.getenv("ROLLBAR_ACCESS_TOKEN", ""),
+    "environment": os.getenv("ROLLBAR_ENVIRONMENT", "development"),
+    "root": BASE_DIR,
+}
