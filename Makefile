@@ -13,5 +13,5 @@ collectstatic:
 	$(PYTHON) manage.py collectstatic --noinput
 
 test:
-	python run_pytest.py
+	cd code && python ../run_pytest.py -vv tests
 
