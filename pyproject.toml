@@ -35,4 +35,4 @@ packages = ["web", "config"]
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
-addopts = "-p no:pytest_dotenv -p no:pytest-dotenv"
+addopts = "-p no:pytest_dotenv -p no:pytest-dotenv -p no:pytest_env"
