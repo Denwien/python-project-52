@@ -13,5 +13,5 @@ collectstatic:
 	$(PYTHON) manage.py collectstatic --noinput
 
 test:
-	PYTHONPATH=.:code:$$PYTHONPATH PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run pytest -vv task_manager/tasks/tests.py
+	PYTHONPATH=.:code:$$PYTHONPATH PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run pytest -vv
 
