@@ -29,3 +29,9 @@ class TaskForm(forms.ModelForm):
         self.fields['executor'].queryset = User.objects.all().order_by('username')
         self.fields['executor'].required = False
         self.fields['executor'].empty_label = "---------"
+        
+        # Use full name for display in select options
+        def label_from_instance(obj):
+            return obj.get_full_name() or obj.username
+        
+        self.fields['executor'].label_from_instance = label_from_instance
