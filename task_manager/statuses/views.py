@@ -9,6 +9,7 @@ from django.views.generic import (
     UpdateView,
 )
 
+from .forms import StatusForm
 from .models import Status
 
 
@@ -20,7 +21,7 @@ class StatusListView(LoginRequiredMixin, ListView):
 
 class StatusCreateView(LoginRequiredMixin, CreateView):
     model = Status
-    fields = ["name"]
+    form_class = StatusForm
     template_name = "statuses/create.html"
     success_url = reverse_lazy("statuses")
 
@@ -31,7 +32,7 @@ class StatusCreateView(LoginRequiredMixin, CreateView):
 
 class StatusUpdateView(LoginRequiredMixin, UpdateView):
     model = Status
-    fields = ["name"]
+    form_class = StatusForm
     template_name = "statuses/update.html"
     success_url = reverse_lazy("statuses")
 

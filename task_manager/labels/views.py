@@ -9,6 +9,7 @@ from django.views.generic import (
     UpdateView,
 )
 
+from .forms import LabelForm
 from .models import Label
 
 
@@ -20,7 +21,7 @@ class LabelListView(LoginRequiredMixin, ListView):
 
 class LabelCreateView(LoginRequiredMixin, CreateView):
     model = Label
-    fields = ["name"]
+    form_class = LabelForm
     template_name = "labels/create.html"
     success_url = reverse_lazy("labels")
 
@@ -31,7 +32,7 @@ class LabelCreateView(LoginRequiredMixin, CreateView):
 
 class LabelUpdateView(LoginRequiredMixin, UpdateView):
     model = Label
-    fields = ["name"]
+    form_class = LabelForm
     template_name = "labels/update.html"
     success_url = reverse_lazy("labels")
 
