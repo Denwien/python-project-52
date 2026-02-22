@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install uv
-          uv sync --frozen --all-groups
+          uv sync --all-groups
 
       - name: Setup database
         run: |
