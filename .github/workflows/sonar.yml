@@ -16,6 +16,25 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv sync --frozen --all-groups
+
+      - name: Setup database
+        run: |
+          uv run python manage.py migrate --noinput
+
+      - name: Run tests with coverage
+        run: |
+          uv run coverage run --source=task_manager -m pytest --ds=task_manager.settings --reuse-db
+          uv run coverage xml -o coverage.xml
+
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602
         env:
@@ -25,9 +44,8 @@ jobs:
           args: >
             "-Dsonar.projectKey=Denwien_python-project-52"
             "-Dsonar.organization=denwien"
-            "-Dsonar.sources=."
-            "-Dsonar.exclusions=**/venv/**,
-            **/migrations/**,
-            **/__pycache__/**,
-            **/tests/**,
-            **/db.sqlite3"
+            "-Dsonar.sources=task_manager"
+            "-Dsonar.exclusions=**/migrations/**,**/__pycache__/**,**/tests.py,**/test_*.py,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py,**/web/**,**/config/**,**/code/**,**/locale/**"
+            "-Dsonar.python.coverage.reportPaths=coverage.xml"
+            "-Dsonar.coverage.exclusions=**/migrations/**,**/__pycache__/**,**/tests.py,**/test_*.py,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py"
+            "-Dsonar.cpd.exclusions=**/migrations/**,**/__pycache__/**,**/web/**,**/config/**,**/code/**"

@@ -15,3 +15,8 @@ collectstatic:
 test:
 	uv run pytest --ds=task_manager.settings --reuse-db
 
+test-coverage:
+	uv run coverage run --source=task_manager -m pytest --ds=task_manager.settings --reuse-db
+	uv run coverage xml
+	uv run coverage report
+
