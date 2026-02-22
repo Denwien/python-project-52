@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import ProtectedError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -52,15 +53,19 @@ class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy("users")
 
     def test_func(self):
-        user = self.get_object()
-        if user.authored_tasks.exists() or user.executed_tasks.exists():
-            messages.error(self.request, "Невозможно удалить пользователя, потому что он используется")
-            return False
-        return user == self.request.user
+        return self.get_object() == self.request.user
 
-    def delete(self, request, *args, **kwargs):
-        messages.success(request, "Пользователь успешно удалён")
-        return super().delete(request, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            messages.success(request, "Пользователь успешно удален")
+            return response
+        except ProtectedError:
+            messages.error(
+                request,
+                "Невозможно удалить пользователя, потому что он используется"
+            )
+            return redirect(self.success_url)
 
 
 class UserLoginView(SuccessMessageMixin, LoginView):
