@@ -9,13 +9,13 @@ User = get_user_model()
 class UserCreateForm(UserCreationForm):
     password1 = forms.CharField(
         required=True,
-        label=_("Password"),
+        label=_("Пароль"),
         widget=forms.PasswordInput,
         help_text=_("Your password must contain at least 3 characters.")
     )
     password2 = forms.CharField(
         required=True,
-        label=_("Confirm Password"),
+        label=_("Подтверждение пароля"),
         widget=forms.PasswordInput,
         help_text=_("Enter the same password again for verification.")
     )
