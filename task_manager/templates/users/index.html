@@ -3,8 +3,9 @@
 {% load i18n %}
 
 {% block content %}
-<h1 class="my-4">{% trans "Users" %}</h1>
-<table class="table table-striped">
+<div class="container wrapper flex-grow-1">
+  <h1 class="my-4">{% trans "Users" %}</h1>
+  <table class="table table-striped">
   <thead>
     <tr>
       <th>ID</th>
@@ -28,6 +29,7 @@
         </td>
       </tr>
     {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
 {% endblock %}
