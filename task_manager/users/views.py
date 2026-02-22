@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -11,6 +10,8 @@ from django.views.generic import (
     UpdateView,
 )
 
+from .forms import UserCreateForm, UserUpdateForm
+
 
 class UserListView(ListView):
     model = User
@@ -20,7 +21,7 @@ class UserListView(ListView):
 
 class UserCreateView(CreateView):
     model = User
-    form_class = UserCreationForm
+    form_class = UserCreateForm
     template_name = "users/create.html"
     success_url = reverse_lazy("login")
 
@@ -31,7 +32,7 @@ class UserCreateView(CreateView):
 
 class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = User
-    form_class = UserCreationForm
+    form_class = UserUpdateForm
     template_name = "users/update.html"
     success_url = reverse_lazy("users")
 
