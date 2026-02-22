@@ -83,6 +83,7 @@ class TaskDeleteView(
         )
         return redirect(self.success_url)
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
         messages.success(request, "Задача успешно удалена")
-        return super().delete(request, *args, **kwargs)
+        return response
