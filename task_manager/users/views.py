@@ -26,7 +26,7 @@ class UserCreateView(CreateView):
     success_url = reverse_lazy("login")
 
     def form_valid(self, form):
-        messages.success(self.request, "User created successfully")
+        messages.success(self.request, "Пользователь успешно зарегистрирован")
         return super().form_valid(form)
 
 
@@ -40,7 +40,7 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.get_object() == self.request.user
 
     def form_valid(self, form):
-        messages.success(self.request, "User updated successfully")
+        messages.success(self.request, "Пользователь успешно изменён")
         return super().form_valid(form)
 
 
@@ -52,10 +52,10 @@ class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         user = self.get_object()
         if user.authored_tasks.exists() or user.executed_tasks.exists():
-            messages.error(self.request, "Cannot delete user with tasks")
+            messages.error(self.request, "Невозможно удалить пользователя, потому что он используется")
             return False
         return user == self.request.user
 
     def delete(self, request, *args, **kwargs):
-        messages.success(request, "User deleted successfully")
+        messages.success(request, "Пользователь успешно удалён")
         return super().delete(request, *args, **kwargs)

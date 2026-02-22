@@ -25,7 +25,7 @@ class StatusCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("statuses")
 
     def form_valid(self, form):
-        messages.success(self.request, "Status created successfully")
+        messages.success(self.request, "Статус успешно создан")
         return super().form_valid(form)
 
 
@@ -36,7 +36,7 @@ class StatusUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("statuses")
 
     def form_valid(self, form):
-        messages.success(self.request, "Status updated successfully")
+        messages.success(self.request, "Статус успешно изменён")
         return super().form_valid(form)
 
 
@@ -48,7 +48,7 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         status = self.get_object()
         if status.tasks.exists():
-            messages.error(request, "Cannot delete status with tasks")
+            messages.error(request, "Невозможно удалить статус, потому что он используется")
             return redirect("statuses")
-        messages.success(request, "Status deleted successfully")
+        messages.success(request, "Статус успешно удалён")
         return super().delete(request, *args, **kwargs)
