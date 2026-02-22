@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.decorators.http import require_http_methods
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -16,6 +17,7 @@ from .forms import TaskForm
 from .models import Task
 
 
+@require_http_methods(["GET"])
 def index(request):
     return render(request, "index.html")
 
