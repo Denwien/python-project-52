@@ -3,9 +3,10 @@
 {% load i18n %}
 
 {% block content %}
-<h1 class="my-4">{% trans "Labels" %}</h1>
+<div class="container wrapper flex-grow-1">
+  <h1 class="my-4">{% trans "Labels" %}</h1>
 
-<a href="{% url 'label_create' %}" class="btn btn-primary">Создать метку</a>
+  <a href="{% url 'label_create' %}" class="btn btn-primary mb-3">Создать метку</a>
 
 <table class="table table-striped">
   <thead>
@@ -23,7 +24,7 @@
         <td>{{ label.name }}</td>
         <td>{{ label.created_at|date:"d.m.Y H:i" }}</td>
         <td>
-          <a href="{% url 'label_update' label.id %}">{% trans "Update" %}</a>
+          <a href="{% url 'label_update' label.id %}">Изменить</a>
           <br>
           <a href="{% url 'label_delete' label.id %}">{% trans "Delete" %}</a>
         </td>
@@ -33,6 +34,7 @@
         <td colspan="4">{% trans "No labels" %}</td>
       </tr>
     {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
 {% endblock %}

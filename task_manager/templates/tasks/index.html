@@ -57,7 +57,7 @@
           </td>
           <td class="col-2">{{ task.created_at|date:"d.m.Y H:i" }}</td>
           <td class="col-1">
-            <a href="{% url 'task_update' task.id %}">{% trans "Update" %}</a>
+            <a href="{% url 'task_update' task.id %}">Изменить</a>
             <br>
             <a href="{% url 'task_delete' task.id %}">{% trans "Delete" %}</a>
           </td>
