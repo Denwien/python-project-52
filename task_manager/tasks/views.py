@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -76,6 +76,8 @@ class TaskDeleteView(
     def test_func(self):
         return self.get_object().author == self.request.user
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        if not self.test_func():
+            return redirect(self.success_url)
         messages.success(request, "Задача успешно удалена")
         return super().delete(request, *args, **kwargs)

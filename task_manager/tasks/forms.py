@@ -1,7 +1,10 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from .models import Task
+
+User = get_user_model()
 
 
 class TaskForm(forms.ModelForm):
@@ -16,5 +19,12 @@ class TaskForm(forms.ModelForm):
             'labels': _('Метки'),
         }
         widgets = {
+            'status': forms.Select(attrs={'class': 'form-control'}),
+            'executor': forms.Select(attrs={'class': 'form-control'}),
             'labels': forms.SelectMultiple(attrs={'class': 'form-control'})
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['executor'].queryset = User.objects.all()
+        self.fields['executor'].required = False
