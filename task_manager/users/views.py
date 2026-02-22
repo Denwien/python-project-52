@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -10,7 +12,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .forms import UserCreateForm, UserUpdateForm
+from .forms import UserCreateForm, UserUpdateForm, UserLoginForm
 
 
 class UserListView(ListView):
@@ -59,3 +61,12 @@ class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(request, "Пользователь успешно удалён")
         return super().delete(request, *args, **kwargs)
+
+
+class UserLoginView(SuccessMessageMixin, LoginView):
+    form_class = UserLoginForm
+    template_name = "auth/login.html"
+    success_message = "Вы залогинены"
+    
+    def get_success_url(self):
+        return reverse_lazy("index")

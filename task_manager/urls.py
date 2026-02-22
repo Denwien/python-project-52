@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
 
-from task_manager.users.forms import UserLoginForm
+from task_manager.users.views import UserLoginView
 
 urlpatterns = [
     path("", include("task_manager.tasks.urls")),
@@ -11,9 +11,7 @@ urlpatterns = [
     path("labels/", include("task_manager.labels.urls")),
     path(
         "login/",
-        auth_views.LoginView.as_view(
-            template_name="auth/login.html",
-            authentication_form=UserLoginForm,
+        UserLoginView.as_view(
             redirect_authenticated_user=True,
         ),
         name="login",
