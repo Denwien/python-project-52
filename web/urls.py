@@ -2,14 +2,14 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from .views import (
+    LabelCreateView,
+    LabelDeleteView,
+    LabelListView,
+    LabelUpdateView,
     StatusCreateView,
     StatusDeleteView,
     StatusListView,
     StatusUpdateView,
-    LabelListView,
-    LabelCreateView,
-    LabelUpdateView,
-    LabelDeleteView,
     TaskCreateView,
     TaskDeleteView,
     TaskDetailView,

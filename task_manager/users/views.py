@@ -13,7 +13,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .forms import UserCreateForm, UserUpdateForm, UserLoginForm
+from .forms import UserCreateForm, UserLoginForm, UserUpdateForm
 
 
 class UserListView(ListView):

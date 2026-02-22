@@ -1,15 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.decorators.http import require_http_methods
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_http_methods
 from django.views.generic import (
     CreateView,
     DeleteView,
     DetailView,
     UpdateView,
 )
-
 from django_filters.views import FilterView
 
 from .filters import TaskFilter

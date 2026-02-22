@@ -1,7 +1,7 @@
 import django_filters
 from django import forms
 
-from .models import Task, Status, Label
+from .models import Label, Status, Task
 
 
 class TaskFilter(django_filters.FilterSet):
