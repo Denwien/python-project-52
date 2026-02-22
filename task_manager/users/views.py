@@ -42,7 +42,7 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.get_object() == self.request.user
 
     def form_valid(self, form):
-        messages.success(self.request, "Пользователь успешно изменён")
+        messages.success(self.request, "Пользователь успешно изменен")
         return super().form_valid(form)
 
 
