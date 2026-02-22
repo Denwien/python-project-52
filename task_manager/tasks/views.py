@@ -76,8 +76,9 @@ class TaskDeleteView(
     def test_func(self):
         return self.get_object().author == self.request.user
 
-    def post(self, request, *args, **kwargs):
-        if not self.test_func():
-            return redirect(self.success_url)
+    def handle_no_permission(self):
+        return redirect(self.success_url)
+
+    def delete(self, request, *args, **kwargs):
         messages.success(request, "Задача успешно удалена")
         return super().delete(request, *args, **kwargs)
