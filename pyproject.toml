@@ -17,9 +17,6 @@ dependencies = [
     "whitenoise>=6.9.0",
 ]
 
-[project.entry-points."pytest11"]
-early_blocker = "code.pytest_early_blocker"
-
 [dependency-groups]
 dev = [
     "coverage>=7.10.2",
@@ -35,16 +32,4 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["task_manager", "config"]
 
-[tool.ruff]
-line-length = 100
-target-version = "py312"
 
-[tool.ruff.lint]
-select = ["E", "F", "I", "N", "W"]
-ignore = ["E501"]
-
-[tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "task_manager.settings"
-python_files = ["tests.py", "test_*.py", "*_tests.py"]
-addopts = "-p no:pytest_dotenv -p no:pytest-dotenv -p no:pytest_env -p no:pytest-env"
-pytest_plugins = ["code.pytest_early_blocker"]
