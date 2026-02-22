@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -70,3 +70,11 @@ class UserLoginView(SuccessMessageMixin, LoginView):
     
     def get_success_url(self):
         return reverse_lazy("index")
+
+
+class UserLogoutView(LogoutView):
+    next_page = reverse_lazy("index")
+    
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, "Вы разлогинены")
+        return super().dispatch(request, *args, **kwargs)

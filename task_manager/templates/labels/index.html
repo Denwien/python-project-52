@@ -1,16 +1,38 @@
 {% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load i18n %}
+
 {% block content %}
-<h1>Labels</h1>
+<h1 class="my-4">{% trans "Labels" %}</h1>
 
-<a href="{% url 'label_create' %}">Create</a>
+<a href="{% url 'label_create' %}" class="btn btn-primary">{% trans "Create label" %}</a>
 
-<ul>
-  {% for label in labels %}
-    <li>
-      {{ label.name }}
-      <a href="{% url 'label_update' label.id %}">Edit</a>
-      <a href="{% url 'label_delete' label.id %}">Delete</a>
-    </li>
-  {% endfor %}
-</ul>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>{% trans "Name" %}</th>
+      <th>{% trans "Creation date" %}</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for label in labels %}
+      <tr>
+        <td>{{ label.id }}</td>
+        <td>{{ label.name }}</td>
+        <td>{{ label.created_at|date:"d.m.Y H:i" }}</td>
+        <td>
+          <a href="{% url 'label_update' label.id %}">{% trans "Update" %}</a>
+          <br>
+          <a href="{% url 'label_delete' label.id %}">{% trans "Delete" %}</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4">{% trans "No labels" %}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}

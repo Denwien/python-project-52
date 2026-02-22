@@ -1,32 +1,35 @@
 {% load django_bootstrap5 %}
+{% load i18n %}
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="utf-8">
-  <title>Task Manager</title>
+  <title>{% trans "Task Manager Hexlet" %}</title>
   {% bootstrap_css %}
   {% bootstrap_javascript %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="{% url 'index' %}">Task Manager</a>
-
-    <div class="collapse navbar-collapse">
-      <ul class="navbar-nav me-auto">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}">{% trans "Task Manager" %}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'users' %}">Users</a>
+          <a class="nav-link" href="{% url 'users' %}">{% trans "Users" %}</a>
         </li>
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'statuses' %}">Statuses</a>
+            <a class="nav-link" href="{% url 'statuses' %}">{% trans "Statuses" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'tasks' %}">Tasks</a>
+            <a class="nav-link" href="{% url 'labels' %}">{% trans "Labels" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'labels' %}">Labels</a>
+            <a class="nav-link" href="{% url 'tasks' %}">{% trans "Tasks" %}</a>
           </li>
         {% endif %}
       </ul>
@@ -34,17 +37,19 @@
       <ul class="navbar-nav ms-auto">
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <form method="post" action="{% url 'logout' %}">
+            <form action="{% url 'logout' %}" method="post" class="d-inline">
               {% csrf_token %}
-              <button class="btn btn-link nav-link" type="submit">Выход</button>
+              <button type="submit" class="nav-link btn btn-link">
+                {% trans 'Logout' %}
+              </button>
             </form>
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Вход</a>
+            <a class="nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_create' %}">Регистрация</a>
+            <a class="nav-link" href="{% url 'user_create' %}">{% trans "Registration" %}</a>
           </li>
         {% endif %}
       </ul>
@@ -52,15 +57,16 @@
   </div>
 </nav>
 
-<div class="container mt-4">
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
-  {% endif %}
-
+<div class="container wrapper flex-grow-1">
+  {% bootstrap_messages %}
   {% block content %}{% endblock %}
 </div>
+
+<footer>
+  <div class="container my-5 pt-4 border-top">
+    <a target="_blank" href="https://ru.hexlet.io">Hexlet</a>
+  </div>
+</footer>
 
 </body>
 </html>
