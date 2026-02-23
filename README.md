@@ -6,6 +6,9 @@
 ### SonarCloud Quality Gate:
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Denwien_python-project-52&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Denwien_python-project-52)
 
+### Code Coverage:
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Denwien_python-project-52&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Denwien_python-project-52)
+
 ## Description
 
 Task Manager is a web application built with Django.  
