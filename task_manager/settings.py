@@ -61,7 +61,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "config.wsgi.application"
+WSGI_APPLICATION = "task_manager.wsgi.application"
 
 DATABASES = {
     "default": dj_database_url.config(
