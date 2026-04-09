@@ -38,15 +38,17 @@ jobs:
       - name: SonarCloud Scan
         uses: sonarsource/sonarqube-scan-action@v2
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
         with:
           args: >
             -Dsonar.projectKey=Denwien_python-project-52
             -Dsonar.organization=denwien
             -Dsonar.sources=task_manager
+            -Dsonar.tests=task_manager
+            -Dsonar.test.inclusions=**/tests/**
             -Dsonar.python.version=3.12
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.exclusions=**/migrations/**,**/__pycache__/**,**/locale/**,**/static/**,**/tests/**
+            -Dsonar.exclusions=**/migrations/**,**/__pycache__/**,**/locale/**,**/static/**
             -Dsonar.coverage.exclusions=**/migrations/**,**/tests/**,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py
             -Dsonar.cpd.exclusions=**/migrations/**,**/tests/**
