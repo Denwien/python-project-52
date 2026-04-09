@@ -1,4 +1,3 @@
-```python
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect, render
@@ -91,4 +90,3 @@ class TaskDeleteView(
         response = super().post(request, *args, **kwargs)
         messages.success(request, "Задача успешно удалена")
         return response
-```
