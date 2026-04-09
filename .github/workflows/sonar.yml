@@ -33,10 +33,17 @@ jobs:
           uv run python manage.py migrate --noinput
 
       - name: Run tests with coverage
+
         run: |
+
           uv run coverage erase
+
           uv run coverage run --branch --source=task_manager -m pytest
-          uv run coverage xml
+
+          uv run coverage xml --relative-source
+
+          uv run coverage report
+
           uv run coverage report
 
       - name: SonarCloud Scan
