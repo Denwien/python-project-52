@@ -9,6 +9,8 @@ on:
 jobs:
   sonar:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout repository
@@ -32,6 +34,7 @@ jobs:
 
       - name: Run tests with coverage
         run: |
+          uv run coverage erase
           uv run coverage run --branch --source=task_manager -m pytest
           uv run coverage xml
           uv run coverage report
@@ -48,8 +51,8 @@ jobs:
             -Dsonar.sources=task_manager
             -Dsonar.tests=task_manager
             -Dsonar.test.inclusions=**/tests/**
-            -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.python.version=3.12
+            -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.exclusions=**/migrations/**,**/__pycache__/**,**/locale/**,**/static/**
             -Dsonar.coverage.exclusions=**/tests/**,**/migrations/**,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py
             -Dsonar.cpd.exclusions=**/tests/**,**/migrations/**
