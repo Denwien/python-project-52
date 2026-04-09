@@ -7,10 +7,10 @@ from django.urls import reverse
 def test_create_label(client, django_user_model):
     user = django_user_model.objects.create_user(
         username="testuser",
-        password="password123",
+        password="test_password",
     )
 
-    client.login(username="testuser", password="password123")
+    client.login(username="testuser", password="test_password")
 
     response = client.post(
         reverse("label_create"),
@@ -27,8 +27,8 @@ def test_label_delete_when_used(client):
     from task_manager.statuses.models import Status
     from task_manager.tasks.models import Task
 
-    user = User.objects.create_user(username="user", password="123")
-    client.login(username="user", password="123")
+    user = User.objects.create_user(username="user", password="test_password")
+    client.login(username="user", password="test_password")
 
     status = Status.objects.create(name="new")
     label = Label.objects.create(name="bug")

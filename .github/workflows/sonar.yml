@@ -51,6 +51,10 @@ jobs:
             -Dsonar.test.inclusions=**/tests/**
             -Dsonar.python.version=3.12
             -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.tests=task_manager
+            -Dsonar.test.inclusions=**/tests/**
+            -Dsonar.coverage.exclusions=**/tests/**,**/migrations/**,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py
+            -Dsonar.cpd.exclusions=**/tests/**,**/migrations/**
             -Dsonar.exclusions=**/migrations/**,**/__pycache__/**,**/locale/**,**/static/**
             -Dsonar.coverage.exclusions=**/migrations/**,**/tests/**,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py
             -Dsonar.cpd.exclusions=**/migrations/**,**/tests/**

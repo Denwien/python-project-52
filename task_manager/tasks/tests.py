@@ -13,11 +13,11 @@ class StatusCRUDTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="test",
-            password="Test12345!",
+            password="test_password",
         )
         self.client.login(
             username="test",
-            password="Test12345!",
+            password="test_password",
         )
 
     def test_create_status(self):
@@ -68,14 +68,14 @@ class TaskCRUDTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="author",
-            password="Test12345!",
+            password="test_password",
         )
         self.status = Status.objects.create(
             name="New",
         )
         self.client.login(
             username="author",
-            password="Test12345!",
+            password="test_password",
         )
 
     def test_create_task(self):
@@ -135,11 +135,11 @@ class LabelCRUDTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="label",
-            password="Test12345!",
+            password="test_password",
         )
         self.client.login(
             username="label",
-            password="Test12345!",
+            password="test_password",
         )
 
     def test_create_label(self):
@@ -184,11 +184,11 @@ class TaskFilterTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="filteruser",
-            password="Test12345!",
+            password="test_password",
         )
         self.other = User.objects.create_user(
             username="other",
-            password="Test12345!",
+            password="test_password",
         )
         self.status = Status.objects.create(name="new")
         self.label = Label.objects.create(name="bug")
@@ -208,7 +208,7 @@ class TaskFilterTest(TestCase):
 
         self.client.login(
             username="filteruser",
-            password="Test12345!",
+            password="test_password",
         )
 
     def test_filter_only_self_tasks(self):
@@ -233,7 +233,7 @@ def test_task_str():
     from task_manager.tasks.models import Task
     from task_manager.statuses.models import Status
 
-    user = User.objects.create_user(username="user", password="123")
+    user = User.objects.create_user(username="user", password="test_password")
     status = Status.objects.create(name="new")
 
     task = Task.objects.create(
@@ -252,8 +252,8 @@ def test_task_delete_not_author(client):
     from task_manager.tasks.models import Task
     from task_manager.statuses.models import Status
 
-    user1 = User.objects.create_user(username="u1", password="123")
-    user2 = User.objects.create_user(username="u2", password="123")
+    user1 = User.objects.create_user(username="u1", password="test_password")
+    user2 = User.objects.create_user(username="u2", password="test_password")
 
     status = Status.objects.create(name="new")
 
@@ -263,7 +263,7 @@ def test_task_delete_not_author(client):
         author=user1
     )
 
-    client.login(username="u2", password="123")
+    client.login(username="u2", password="test_password")
 
     response = client.post(reverse("task_delete", args=[task.id]))
 
@@ -278,7 +278,7 @@ def test_executor_full_name_label():
         username="executor",
         first_name="John",
         last_name="Doe",
-        password="123"
+        password="test_password"
     )
 
     form = TaskForm()
