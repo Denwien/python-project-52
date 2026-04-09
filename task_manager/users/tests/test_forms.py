@@ -1,4 +1,5 @@
 import pytest
+import pytest
 from django.contrib.auth.models import User
 
 from task_manager.users.forms import UserCreateForm, UserUpdateForm
@@ -55,3 +56,20 @@ def test_user_update_form_duplicate_username():
     )
 
     assert not form.is_valid()
+@pytest.mark.django_db
+def test_user_create_duplicate_username(client):
+    from django.urls import reverse
+    from django.contrib.auth.models import User
+
+    User.objects.create_user(username="user", password="123")
+
+    response = client.post(
+        reverse("user_create"),
+        {
+            "username": "user",
+            "password1": "12345",
+            "password2": "12345",
+        },
+    )
+
+    assert response.status_code == 200

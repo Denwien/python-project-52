@@ -1,3 +1,4 @@
+import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
@@ -225,3 +226,45 @@ class TaskFilterTest(TestCase):
         )
         self.assertContains(response, "My task")
         self.assertNotContains(response, "Other task")
+
+@pytest.mark.django_db
+def test_task_str():
+    from django.contrib.auth.models import User
+    from task_manager.tasks.models import Task
+    from task_manager.statuses.models import Status
+
+    user = User.objects.create_user(username="user", password="123")
+    status = Status.objects.create(name="new")
+
+    task = Task.objects.create(
+        name="task name",
+        status=status,
+        author=user
+    )
+
+    assert str(task) == "task name"
+
+
+@pytest.mark.django_db
+def test_task_delete_not_author(client):
+    from django.urls import reverse
+    from django.contrib.auth.models import User
+    from task_manager.tasks.models import Task
+    from task_manager.statuses.models import Status
+
+    user1 = User.objects.create_user(username="u1", password="123")
+    user2 = User.objects.create_user(username="u2", password="123")
+
+    status = Status.objects.create(name="new")
+
+    task = Task.objects.create(
+        name="task",
+        status=status,
+        author=user1
+    )
+
+    client.login(username="u2", password="123")
+
+    response = client.post(reverse("task_delete", args=[task.id]))
+
+    assert response.status_code == 302

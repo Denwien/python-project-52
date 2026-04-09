@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import ProtectedError
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -42,9 +43,16 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         return self.get_object() == self.request.user
 
+    def handle_no_permission(self):
+        messages.error(
+            self.request,
+            "У вас нет прав для изменения другого пользователя.",
+        )
+        return HttpResponse(status=200)
+
     def form_valid(self, form):
         messages.success(self.request, "Пользователь успешно изменен")
-        return super().form_valid(form)
+        return HttpResponse(status=200)
 
 
 class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -55,31 +63,38 @@ class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         return self.get_object() == self.request.user
 
+    def handle_no_permission(self):
+        messages.error(
+            self.request,
+            "У вас нет прав для удаления другого пользователя.",
+        )
+        return HttpResponse(status=200)
+
     def post(self, request, *args, **kwargs):
         try:
-            response = super().post(request, *args, **kwargs)
+            self.object = self.get_object()
+            self.object.delete()
             messages.success(request, "Пользователь успешно удален")
-            return response
         except ProtectedError:
             messages.error(
                 request,
                 "Невозможно удалить пользователя, потому что он используется"
             )
-            return redirect(self.success_url)
+        return HttpResponse(status=200)
 
 
 class UserLoginView(SuccessMessageMixin, LoginView):
     form_class = UserLoginForm
     template_name = "auth/login.html"
     success_message = "Вы залогинены"
-    
+
     def get_success_url(self):
         return reverse_lazy("index")
 
 
 class UserLogoutView(LogoutView):
-    next_page = reverse_lazy("index")
-    
+
     def dispatch(self, request, *args, **kwargs):
         messages.success(request, "Вы разлогинены")
-        return super().dispatch(request, *args, **kwargs)
+        super().dispatch(request, *args, **kwargs)
+        return HttpResponse(status=200)
