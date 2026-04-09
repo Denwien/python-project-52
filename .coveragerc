@@ -1,11 +1,9 @@
 [run]
-branch = True
 source = task_manager
+relative_files = True
+branch = True
 
 [report]
 omit =
     */migrations/*
     */tests/*
-    manage.py
-    task_manager/users/forms.py
-    task_manager/users/views.py
