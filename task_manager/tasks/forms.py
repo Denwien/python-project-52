@@ -26,12 +26,3 @@ class TaskForm(forms.ModelForm):
             "status": "Статус",
             "labels": "Метки",
         }
-
-    def clean_name(self):
-        name = self.cleaned_data.get("name")
-        qs = Task.objects.filter(name=name)
-        if self.instance.pk:
-            qs = qs.exclude(pk=self.instance.pk)
-        if qs.exists():
-            raise forms.ValidationError("Задача с таким именем уже существует.")
-        return name
