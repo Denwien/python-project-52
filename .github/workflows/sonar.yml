@@ -45,6 +45,7 @@ jobs:
             "-Dsonar.projectKey=Denwien_python-project-52"
             "-Dsonar.organization=denwien"
             "-Dsonar.sources=task_manager"
+            "-Dsonar.python.version=3.12"
             "-Dsonar.exclusions=**/migrations/**,**/__pycache__/**,**/tests.py,**/test_*.py,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py,**/web/**,**/config/**,**/code/**,**/locale/**"
             "-Dsonar.python.coverage.reportPaths=coverage.xml"
             "-Dsonar.coverage.exclusions=**/migrations/**,**/__pycache__/**,**/tests.py,**/test_*.py,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py"
