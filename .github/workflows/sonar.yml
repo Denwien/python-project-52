@@ -1,54 +1,52 @@
 name: Python CI
 
 on:
-push:
-branches: [ main ]
-pull_request:
-branches: [ main ]
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-sonar:
-runs-on: ubuntu-latest
+  sonar:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v4
-    with:
-      fetch-depth: 0
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  - name: Setup Python
-    uses: actions/setup-python@v5
-    with:
-      python-version: "3.12"
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-  - name: Install dependencies
-    run: |
-      pip install uv
-      uv sync --all-groups
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv sync --all-groups
 
-  - name: Run migrations
-    run: |
-      uv run python manage.py migrate --noinput
+      - name: Run migrations
+        run: |
+          uv run python manage.py migrate --noinput
 
-  - name: Run tests with coverage
-    run: |
-      uv run coverage run --branch --source=task_manager -m pytest --ds=task_manager.settings --reuse-db
-      uv run coverage xml -o coverage.xml
+      - name: Run tests with coverage
+        run: |
+          uv run coverage run --branch --source=task_manager -m pytest --ds=task_manager.settings --reuse-db
+          uv run coverage xml -o coverage.xml
 
-  - name: SonarCloud Scan
-    uses: sonarsource/sonarqube-scan-action@v2
-    env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: https://sonarcloud.io
-    with:
-      args: >
-        -Dsonar.projectKey=Denwien_python-project-52
-        -Dsonar.organization=denwien
-        -Dsonar.sources=task_manager
-        -Dsonar.python.version=3.12
-        -Dsonar.python.coverage.reportPaths=coverage.xml
-        -Dsonar.exclusions=**/migrations/**,**/__pycache__/**,**/locale/**,**/static/**
-        -Dsonar.coverage.exclusions=**/migrations/**,**/tests/**,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py
-        -Dsonar.cpd.exclusions=**/migrations/**
-```
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarqube-scan-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+        with:
+          args: >
+            -Dsonar.projectKey=Denwien_python-project-52
+            -Dsonar.organization=denwien
+            -Dsonar.sources=task_manager
+            -Dsonar.python.version=3.12
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.exclusions=**/migrations/**,**/__pycache__/**,**/locale/**,**/static/**
+            -Dsonar.coverage.exclusions=**/migrations/**,**/tests/**,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py
+            -Dsonar.cpd.exclusions=**/migrations/**
