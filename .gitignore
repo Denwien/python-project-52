@@ -16,3 +16,5 @@ ruff_cache/
 .coveragecoverage.xml
 .coverage
 coverage.xml
+__pycache__/
+*.pyc
