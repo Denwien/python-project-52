@@ -22,10 +22,6 @@ db.sqlite3
 staticfiles/
 
 # Coverage
-.coverage
-coverage.xml
-htmlcov/
-.coveragerc
 
 # Pytest
 .pytest_cache/
