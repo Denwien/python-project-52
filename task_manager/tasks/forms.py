@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 from .models import Task
 
@@ -27,8 +28,10 @@ class TaskForm(forms.ModelForm):
             "labels": "Метки",
         }
 
-    def validate_unique(self):
-        try:
-            self.instance.validate_unique()
-        except forms.ValidationError as e:
-            self._update_errors(e)
+    def clean_name(self):
+        name = self.cleaned_data.get("name")
+
+        if name and Task.objects.filter(name=name).exists():
+            raise ValidationError("Задача с таким именем уже существует")
+
+        return name
