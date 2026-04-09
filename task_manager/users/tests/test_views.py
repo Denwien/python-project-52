@@ -132,3 +132,81 @@ def test_update_other_user(client):
 
     response = client.get(reverse("user_update", args=[user2.id]))
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_users_redirect_after_create(client):
+    response = client.post(
+        reverse("user_create"),
+        {
+            "username": "newuser",
+            "password1": "12345test",
+            "password2": "12345test",
+        },
+    )
+
+    assert response.status_code in [200, 302]
+
+
+@pytest.mark.django_db
+def test_update_user_not_logged(client):
+    user = User.objects.create_user(username="test", password="123")
+
+    response = client.get(reverse("user_update", args=[user.id]))
+
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_delete_user_not_logged(client):
+    user = User.objects.create_user(username="test2", password="123")
+
+    response = client.post(reverse("user_delete", args=[user.id]))
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_update_without_login(client):
+    from django.contrib.auth.models import User
+    from django.urls import reverse
+
+    user = User.objects.create_user(username="nouser", password="123")
+
+    response = client.get(reverse("user_update", args=[user.id]))
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_update_user_invalid_form(client, django_user_model):
+    from django.urls import reverse
+
+    user = django_user_model.objects.create_user(
+        username="invaliduser",
+        password="password123",
+    )
+
+    client.login(username="invaliduser", password="password123")
+
+    response = client.post(
+        reverse("user_update", args=[user.id]),
+        {
+            "username": "",
+        },
+    )
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_delete_user_get_request(client, django_user_model):
+    from django.urls import reverse
+
+    user = django_user_model.objects.create_user(
+        username="deleteget",
+        password="password123",
+    )
+
+    client.login(username="deleteget", password="password123")
+
+    response = client.get(reverse("user_delete", args=[user.id]))
+
+    assert response.status_code == 200

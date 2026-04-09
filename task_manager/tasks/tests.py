@@ -268,3 +268,25 @@ def test_task_delete_not_author(client):
     response = client.post(reverse("task_delete", args=[task.id]))
 
     assert response.status_code == 302
+
+@pytest.mark.django_db
+def test_executor_full_name_label():
+    from django.contrib.auth.models import User
+    from task_manager.tasks.forms import TaskForm
+
+    user = User.objects.create_user(
+        username="executor",
+        first_name="John",
+        last_name="Doe",
+        password="123"
+    )
+
+    form = TaskForm()
+    label = form.fields["executor"].label_from_instance(user)
+
+    assert label == "John Doe"
+
+def test_index_view(client):
+    from django.urls import reverse
+    response = client.get(reverse("index"))
+    assert response.status_code == 200

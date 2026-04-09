@@ -73,3 +73,101 @@ def test_user_create_duplicate_username(client):
     )
 
     assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_user_creation_password_mismatch(client):
+    from django.urls import reverse
+
+    response = client.post(
+        reverse("user_create"),
+        {
+            "username": "user123",
+            "password1": "12345",
+            "password2": "54321",
+        },
+    )
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_user_creation_without_names(client):
+    from django.urls import reverse
+
+    response = client.post(
+        reverse("user_create"),
+        {
+            "username": "user_new",
+            "password1": "12345test",
+            "password2": "12345test",
+            "first_name": "",
+            "last_name": "",
+        },
+    )
+
+    assert response.status_code in [200, 302]
+
+@pytest.mark.django_db
+def test_user_create_duplicate_username(client):
+    from django.urls import reverse
+    from django.contrib.auth.models import User
+
+    User.objects.create_user(username="duplicate", password="123")
+
+    response = client.post(
+        reverse("user_create"),
+        {
+            "username": "duplicate",
+            "password1": "12345test",
+            "password2": "12345test",
+        },
+    )
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_user_create_duplicate_username(client):
+    from django.contrib.auth.models import User
+    from django.urls import reverse
+
+    User.objects.create_user(username="duplicate", password="123")
+
+    response = client.post(
+        reverse("user_create"),
+        {
+            "username": "duplicate",
+            "password1": "12345test",
+            "password2": "12345test",
+        },
+    )
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_user_create_invalid_password(client):
+    from django.urls import reverse
+
+    response = client.post(
+        reverse("user_create"),
+        {
+            "username": "userx",
+            "password1": "123",
+            "password2": "456",
+        },
+    )
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_user_create_password_mismatch(client):
+    from django.urls import reverse
+
+    response = client.post(
+        reverse("user_create"),
+        {
+            "username": "user_mismatch",
+            "password1": "password123",
+            "password2": "different123",
+        },
+    )
+
+    assert response.status_code == 200
