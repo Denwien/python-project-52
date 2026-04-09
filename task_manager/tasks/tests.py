@@ -1,3 +1,4 @@
+import os
 import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -13,11 +14,11 @@ class StatusCRUDTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="test",
-            password="test_password",
+            password=os.getenv("TEST_PASSWORD", "testpass"),
         )
         self.client.login(
             username="test",
-            password="test_password",
+            password=os.getenv("TEST_PASSWORD", "testpass"),
         )
 
     def test_create_status(self):
@@ -68,14 +69,14 @@ class TaskCRUDTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="author",
-            password="test_password",
+            password=os.getenv("TEST_PASSWORD", "testpass"),
         )
         self.status = Status.objects.create(
             name="New",
         )
         self.client.login(
             username="author",
-            password="test_password",
+            password=os.getenv("TEST_PASSWORD", "testpass"),
         )
 
     def test_create_task(self):
@@ -135,11 +136,11 @@ class LabelCRUDTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="label",
-            password="test_password",
+            password=os.getenv("TEST_PASSWORD", "testpass"),
         )
         self.client.login(
             username="label",
-            password="test_password",
+            password=os.getenv("TEST_PASSWORD", "testpass"),
         )
 
     def test_create_label(self):
@@ -184,11 +185,11 @@ class TaskFilterTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="filteruser",
-            password="test_password",
+            password=os.getenv("TEST_PASSWORD", "testpass"),
         )
         self.other = User.objects.create_user(
             username="other",
-            password="test_password",
+            password=os.getenv("TEST_PASSWORD", "testpass"),
         )
         self.status = Status.objects.create(name="new")
         self.label = Label.objects.create(name="bug")
@@ -208,7 +209,7 @@ class TaskFilterTest(TestCase):
 
         self.client.login(
             username="filteruser",
-            password="test_password",
+            password=os.getenv("TEST_PASSWORD", "testpass"),
         )
 
     def test_filter_only_self_tasks(self):
@@ -233,7 +234,7 @@ def test_task_str():
     from task_manager.tasks.models import Task
     from task_manager.statuses.models import Status
 
-    user = User.objects.create_user(username="user", password="test_password")
+    user = User.objects.create_user(username="user", password=os.getenv("TEST_PASSWORD", "testpass"))
     status = Status.objects.create(name="new")
 
     task = Task.objects.create(
@@ -252,8 +253,8 @@ def test_task_delete_not_author(client):
     from task_manager.tasks.models import Task
     from task_manager.statuses.models import Status
 
-    user1 = User.objects.create_user(username="u1", password="test_password")
-    user2 = User.objects.create_user(username="u2", password="test_password")
+    user1 = User.objects.create_user(username="u1", password=os.getenv("TEST_PASSWORD", "testpass"))
+    user2 = User.objects.create_user(username="u2", password=os.getenv("TEST_PASSWORD", "testpass"))
 
     status = Status.objects.create(name="new")
 
@@ -263,7 +264,7 @@ def test_task_delete_not_author(client):
         author=user1
     )
 
-    client.login(username="u2", password="test_password")
+    client.login(username="u2", password=os.getenv("TEST_PASSWORD", "testpass"))
 
     response = client.post(reverse("task_delete", args=[task.id]))
 
@@ -278,7 +279,7 @@ def test_executor_full_name_label():
         username="executor",
         first_name="John",
         last_name="Doe",
-        password="test_password"
+        password=os.getenv("TEST_PASSWORD", "testpass")
     )
 
     form = TaskForm()

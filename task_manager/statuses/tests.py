@@ -1,3 +1,4 @@
+import os
 import pytest
 import pytest
 from django.urls import reverse
@@ -7,10 +8,10 @@ from django.urls import reverse
 def test_create_status(client, django_user_model):
     user = django_user_model.objects.create_user(
         username="testuser",
-        password="test_password",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
     )
 
-    client.login(username="testuser", password="test_password")
+    client.login(username="testuser", password=os.getenv("TEST_PASSWORD", "testpass"))
 
     response = client.post(
         reverse("status_create"),
@@ -26,8 +27,8 @@ def test_status_delete_when_used(client):
     from task_manager.statuses.models import Status
     from task_manager.tasks.models import Task
 
-    user = User.objects.create_user(username="user", password="test_password")
-    client.login(username="user", password="test_password")
+    user = User.objects.create_user(username="user", password=os.getenv("TEST_PASSWORD", "testpass"))
+    client.login(username="user", password=os.getenv("TEST_PASSWORD", "testpass"))
 
     status = Status.objects.create(name="new")
 
