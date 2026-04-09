@@ -9,8 +9,6 @@ on:
 jobs:
   sonar:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout repository
@@ -34,8 +32,9 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          uv run coverage run --branch --source=task_manager -m pytest --ds=task_manager.settings --reuse-db
-          uv run coverage xml -o coverage.xml
+          uv run coverage run --branch --source=task_manager -m pytest
+          uv run coverage xml
+          uv run coverage report
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarqube-scan-action@v2
@@ -49,12 +48,8 @@ jobs:
             -Dsonar.sources=task_manager
             -Dsonar.tests=task_manager
             -Dsonar.test.inclusions=**/tests/**
-            -Dsonar.python.version=3.12
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.tests=task_manager
-            -Dsonar.test.inclusions=**/tests/**
+            -Dsonar.python.version=3.12
+            -Dsonar.exclusions=**/migrations/**,**/__pycache__/**,**/locale/**,**/static/**
             -Dsonar.coverage.exclusions=**/tests/**,**/migrations/**,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py
             -Dsonar.cpd.exclusions=**/tests/**,**/migrations/**
-            -Dsonar.exclusions=**/migrations/**,**/__pycache__/**,**/locale/**,**/static/**
-            -Dsonar.coverage.exclusions=**/migrations/**,**/tests/**,**/settings.py,**/manage.py,**/wsgi.py,**/asgi.py
-            -Dsonar.cpd.exclusions=**/migrations/**,**/tests/**
