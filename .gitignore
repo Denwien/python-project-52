@@ -1,17 +1,39 @@
-venv/
-.venv/
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables
 .env
+.env.*
+
+# Django
 db.sqlite3
-*.db
-*.sqlite
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
+*.sqlite3
+
+# Static files
+staticfiles/
+
+# Coverage
 .coverage
 coverage.xml
 htmlcov/
-staticfiles/
-coverage.xml
-coverage.xml
+.coveragerc
+
+# Pytest
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

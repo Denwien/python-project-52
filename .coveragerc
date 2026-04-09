@@ -1,9 +1,0 @@
-[run]
-source = task_manager
-relative_files = True
-branch = True
-
-[report]
-omit =
-    */migrations/*
-    */tests/*
