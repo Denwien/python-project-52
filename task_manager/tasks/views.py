@@ -1,3 +1,4 @@
+```python
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect, render
@@ -52,6 +53,9 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, "Задача успешно создана")
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
+
 
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
@@ -87,3 +91,4 @@ class TaskDeleteView(
         response = super().post(request, *args, **kwargs)
         messages.success(request, "Задача успешно удалена")
         return response
+```
