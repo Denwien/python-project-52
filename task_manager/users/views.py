@@ -17,7 +17,7 @@ class UserListView(ListView):
     context_object_name = "users"
 
 
-class UserCreateView(CreateView):
+class UserCreateView(SuccessMessageMixin, CreateView):
     model = User
     form_class = UserCreateForm
     template_name = "users/create.html"
