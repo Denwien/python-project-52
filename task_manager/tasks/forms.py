@@ -26,3 +26,9 @@ class TaskForm(forms.ModelForm):
             "status": "Статус",
             "labels": "Метки",
         }
+
+    def validate_unique(self):
+        try:
+            self.instance.validate_unique()
+        except forms.ValidationError as e:
+            self._update_errors(e)
