@@ -2,7 +2,7 @@
 
 [![hexlet-check](https://github.com/Denwien/python-project-52/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Denwien/python-project-52/actions/workflows/hexlet-check.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Denwien_python-project-52&metric=alert_status&branch=main)](https://sonarcloud.io/summary/new_code?id=Denwien_python-project-52)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Denwien_python-project-52&metric=new_coverage)](https://sonarcloud.io/summary/new_code?id=Denwien_python-project-52)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Denwien_python-project-52&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Denwien_python-project-52)
 
 ## Description
 
