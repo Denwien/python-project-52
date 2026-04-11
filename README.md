@@ -1,5 +1,9 @@
 # python-project-52
 
+[![hexlet-check](https://github.com/Denwien/python-project-52/actions/workflows/hexlet-check.yml/badge.svg)]
+
+# python-project-52
+
 ### SonarCloud Quality Gate:
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Denwien_python-project-52&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Denwien_python-project-52)
 

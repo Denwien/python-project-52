@@ -1,12 +1,20 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+)
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import ProtectedError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    ListView,
+    UpdateView,
+)
 
 from .forms import UserCreateForm, UserLoginForm, UserUpdateForm
 
@@ -25,7 +33,12 @@ class UserCreateView(SuccessMessageMixin, CreateView):
     success_message = "Пользователь успешно зарегистрирован"
 
 
-class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+class UserUpdateView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    SuccessMessageMixin,
+    UpdateView,
+):
     model = User
     form_class = UserUpdateForm
     template_name = "users/update.html"
@@ -36,11 +49,18 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
         return self.get_object() == self.request.user
 
     def handle_no_permission(self):
-        messages.error(self.request, "У вас нет прав для изменения другого пользователя.")
+        messages.error(
+            self.request,
+            "У вас нет прав для изменения другого пользователя.",
+        )
         return redirect("users")
 
 
-class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class UserDeleteView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    DeleteView,
+):
     model = User
     template_name = "users/delete.html"
     success_url = reverse_lazy("users")
@@ -49,18 +69,25 @@ class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.get_object() == self.request.user
 
     def handle_no_permission(self):
-        messages.error(self.request, "У вас нет прав для удаления другого пользователя.")
+        messages.error(
+            self.request,
+            "У вас нет прав для удаления другого пользователя.",
+        )
         return redirect("users")
 
     def post(self, request, *args, **kwargs):
         try:
             self.object = self.get_object()
             self.object.delete()
-            messages.success(request, "Пользователь успешно удален")
+            messages.success(
+                request,
+                "Пользователь успешно удален",
+            )
         except ProtectedError:
             messages.error(
                 request,
-                "Невозможно удалить пользователя, потому что он используется"
+                "Невозможно удалить пользователя, "
+                "потому что он используется",
             )
         return redirect("users")
 
@@ -77,7 +104,10 @@ class UserLoginView(SuccessMessageMixin, LoginView):
 class UserLogoutView(LogoutView):
 
     def dispatch(self, request, *args, **kwargs):
-        messages.success(request, "Вы разлогинены")
+        messages.success(
+            request,
+            "Вы разлогинены",
+        )
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):

@@ -1,4 +1,5 @@
 import os
+
 import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -14,11 +15,17 @@ class StatusCRUDTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="test",
-            password=os.getenv("TEST_PASSWORD", "testpass"),
+            password=os.getenv(
+                "TEST_PASSWORD",
+                "testpass",
+            ),
         )
         self.client.login(
             username="test",
-            password=os.getenv("TEST_PASSWORD", "testpass"),
+            password=os.getenv(
+                "TEST_PASSWORD",
+                "testpass",
+            ),
         )
 
     def test_create_status(self):
@@ -39,7 +46,10 @@ class StatusCRUDTest(TestCase):
     def test_update_status(self):
         status = Status.objects.create(name="Old")
         response = self.client.post(
-            reverse("status_update", args=[status.id]),
+            reverse(
+                "status_update",
+                args=[status.id],
+            ),
             {
                 "name": "Updated",
             },
@@ -54,14 +64,19 @@ class StatusCRUDTest(TestCase):
     def test_delete_status(self):
         status = Status.objects.create(name="Delete")
         response = self.client.post(
-            reverse("status_delete", args=[status.id]),
+            reverse(
+                "status_delete",
+                args=[status.id],
+            ),
         )
         self.assertRedirects(
             response,
             reverse("statuses"),
         )
         self.assertFalse(
-            Status.objects.filter(id=status.id).exists(),
+            Status.objects.filter(
+                id=status.id,
+            ).exists(),
         )
 
 
@@ -69,14 +84,20 @@ class TaskCRUDTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="author",
-            password=os.getenv("TEST_PASSWORD", "testpass"),
+            password=os.getenv(
+                "TEST_PASSWORD",
+                "testpass",
+            ),
         )
         self.status = Status.objects.create(
             name="New",
         )
         self.client.login(
             username="author",
-            password=os.getenv("TEST_PASSWORD", "testpass"),
+            password=os.getenv(
+                "TEST_PASSWORD",
+                "testpass",
+            ),
         )
 
     def test_create_task(self):
@@ -103,7 +124,10 @@ class TaskCRUDTest(TestCase):
             author=self.user,
         )
         response = self.client.post(
-            reverse("task_update", args=[task.id]),
+            reverse(
+                "task_update",
+                args=[task.id],
+            ),
             {
                 "name": "Updated",
                 "status": self.status.id,
@@ -121,14 +145,19 @@ class TaskCRUDTest(TestCase):
             author=self.user,
         )
         response = self.client.post(
-            reverse("task_delete", args=[task.id]),
+            reverse(
+                "task_delete",
+                args=[task.id],
+            ),
         )
         self.assertRedirects(
             response,
             reverse("tasks"),
         )
         self.assertFalse(
-            Task.objects.filter(id=task.id).exists(),
+            Task.objects.filter(
+                id=task.id,
+            ).exists(),
         )
 
 
@@ -136,11 +165,17 @@ class LabelCRUDTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="label",
-            password=os.getenv("TEST_PASSWORD", "testpass"),
+            password=os.getenv(
+                "TEST_PASSWORD",
+                "testpass",
+            ),
         )
         self.client.login(
             username="label",
-            password=os.getenv("TEST_PASSWORD", "testpass"),
+            password=os.getenv(
+                "TEST_PASSWORD",
+                "testpass",
+            ),
         )
 
     def test_create_label(self):
@@ -159,7 +194,10 @@ class LabelCRUDTest(TestCase):
     def test_update_label(self):
         label = Label.objects.create(name="Old")
         response = self.client.post(
-            reverse("label_update", args=[label.id]),
+            reverse(
+                "label_update",
+                args=[label.id],
+            ),
             {"name": "New"},
         )
         self.assertRedirects(
@@ -170,14 +208,19 @@ class LabelCRUDTest(TestCase):
     def test_delete_label(self):
         label = Label.objects.create(name="Temp")
         response = self.client.post(
-            reverse("label_delete", args=[label.id]),
+            reverse(
+                "label_delete",
+                args=[label.id],
+            ),
         )
         self.assertRedirects(
             response,
             reverse("labels"),
         )
         self.assertFalse(
-            Label.objects.filter(id=label.id).exists(),
+            Label.objects.filter(
+                id=label.id,
+            ).exists(),
         )
 
 
@@ -185,11 +228,17 @@ class TaskFilterTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="filteruser",
-            password=os.getenv("TEST_PASSWORD", "testpass"),
+            password=os.getenv(
+                "TEST_PASSWORD",
+                "testpass",
+            ),
         )
         self.other = User.objects.create_user(
             username="other",
-            password=os.getenv("TEST_PASSWORD", "testpass"),
+            password=os.getenv(
+                "TEST_PASSWORD",
+                "testpass",
+            ),
         )
         self.status = Status.objects.create(name="new")
         self.label = Label.objects.create(name="bug")
@@ -209,7 +258,10 @@ class TaskFilterTest(TestCase):
 
         self.client.login(
             username="filteruser",
-            password=os.getenv("TEST_PASSWORD", "testpass"),
+            password=os.getenv(
+                "TEST_PASSWORD",
+                "testpass",
+            ),
         )
 
     def test_filter_only_self_tasks(self):
@@ -228,19 +280,27 @@ class TaskFilterTest(TestCase):
         self.assertContains(response, "My task")
         self.assertNotContains(response, "Other task")
 
+
 @pytest.mark.django_db
 def test_task_str():
     from django.contrib.auth.models import User
-    from task_manager.tasks.models import Task
-    from task_manager.statuses.models import Status
 
-    user = User.objects.create_user(username="user", password=os.getenv("TEST_PASSWORD", "testpass"))
+    from task_manager.statuses.models import Status
+    from task_manager.tasks.models import Task
+
+    user = User.objects.create_user(
+        username="user",
+        password=os.getenv(
+            "TEST_PASSWORD",
+            "testpass",
+        ),
+    )
     status = Status.objects.create(name="new")
 
     task = Task.objects.create(
         name="task name",
         status=status,
-        author=user
+        author=user,
     )
 
     assert str(task) == "task name"
@@ -248,38 +308,67 @@ def test_task_str():
 
 @pytest.mark.django_db
 def test_task_delete_not_author(client):
-    from django.urls import reverse
     from django.contrib.auth.models import User
-    from task_manager.tasks.models import Task
-    from task_manager.statuses.models import Status
+    from django.urls import reverse
 
-    user1 = User.objects.create_user(username="u1", password=os.getenv("TEST_PASSWORD", "testpass"))
-    user2 = User.objects.create_user(username="u2", password=os.getenv("TEST_PASSWORD", "testpass"))
+    from task_manager.statuses.models import Status
+    from task_manager.tasks.models import Task
+
+    user1 = User.objects.create_user(
+        username="u1",
+        password=os.getenv(
+            "TEST_PASSWORD",
+            "testpass",
+        ),
+    )
+    User.objects.create_user(
+        username="u2",
+        password=os.getenv(
+            "TEST_PASSWORD",
+            "testpass",
+        ),
+    )
 
     status = Status.objects.create(name="new")
 
     task = Task.objects.create(
         name="task",
         status=status,
-        author=user1
+        author=user1,
     )
 
-    client.login(username="u2", password=os.getenv("TEST_PASSWORD", "testpass"))
+    client.login(
+        username="u2",
+        password=os.getenv(
+            "TEST_PASSWORD",
+            "testpass",
+        ),
+    )
 
-    response = client.post(reverse("task_delete", args=[task.id]))
+    response = client.post(
+        reverse(
+            "task_delete",
+            args=[task.id],
+        )
+    )
 
     assert response.status_code == 302
+
 
 @pytest.mark.django_db
 def test_executor_full_name_label():
     from django.contrib.auth.models import User
+
     from task_manager.tasks.forms import TaskForm
 
     user = User.objects.create_user(
         username="executor",
         first_name="John",
         last_name="Doe",
-        password=os.getenv("TEST_PASSWORD", "testpass")
+        password=os.getenv(
+            "TEST_PASSWORD",
+            "testpass",
+        ),
     )
 
     form = TaskForm()
@@ -287,7 +376,9 @@ def test_executor_full_name_label():
 
     assert label == "John Doe"
 
+
 def test_index_view(client):
     from django.urls import reverse
+
     response = client.get(reverse("index"))
     assert response.status_code == 200

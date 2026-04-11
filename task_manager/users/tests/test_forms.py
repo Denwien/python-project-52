@@ -1,5 +1,5 @@
 import os
-import pytest
+
 import pytest
 from django.contrib.auth.models import User
 
@@ -48,8 +48,20 @@ def test_user_create_form_saves_hashed_password():
 
 @pytest.mark.django_db
 def test_user_update_form_duplicate_username():
-    User.objects.create_user(username="existing", password=os.getenv("TEST_PASSWORD", "testpass"))
-    user = User.objects.create_user(username="user", password=os.getenv("TEST_PASSWORD", "testpass"))
+    User.objects.create_user(
+        username="existing",
+        password=os.getenv(
+            "TEST_PASSWORD",
+            "testpass",
+        ),
+    )
+    user = User.objects.create_user(
+        username="user",
+        password=os.getenv(
+            "TEST_PASSWORD",
+            "testpass",
+        ),
+    )
 
     form = UserUpdateForm(
         instance=user,
@@ -57,12 +69,20 @@ def test_user_update_form_duplicate_username():
     )
 
     assert not form.is_valid()
+
+
 @pytest.mark.django_db
 def test_user_create_duplicate_username(client):
-    from django.urls import reverse
     from django.contrib.auth.models import User
+    from django.urls import reverse
 
-    User.objects.create_user(username="user", password=os.getenv("TEST_PASSWORD", "testpass"))
+    User.objects.create_user(
+        username="user",
+        password=os.getenv(
+            "TEST_PASSWORD",
+            "testpass",
+        ),
+    )
 
     response = client.post(
         reverse("user_create"),
@@ -74,6 +94,7 @@ def test_user_create_duplicate_username(client):
     )
 
     assert response.status_code == 200
+
 
 @pytest.mark.django_db
 def test_user_creation_password_mismatch(client):
@@ -89,6 +110,7 @@ def test_user_creation_password_mismatch(client):
     )
 
     assert response.status_code == 200
+
 
 @pytest.mark.django_db
 def test_user_creation_without_names(client):
@@ -107,12 +129,19 @@ def test_user_creation_without_names(client):
 
     assert response.status_code in [200, 302]
 
-@pytest.mark.django_db
-def test_user_create_duplicate_username(client):
-    from django.urls import reverse
-    from django.contrib.auth.models import User
 
-    User.objects.create_user(username="duplicate", password=os.getenv("TEST_PASSWORD", "testpass"))
+@pytest.mark.django_db
+def test_user_create_duplicate_username_second(client):
+    from django.contrib.auth.models import User
+    from django.urls import reverse
+
+    User.objects.create_user(
+        username="duplicate",
+        password=os.getenv(
+            "TEST_PASSWORD",
+            "testpass",
+        ),
+    )
 
     response = client.post(
         reverse("user_create"),
@@ -125,23 +154,6 @@ def test_user_create_duplicate_username(client):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
-def test_user_create_duplicate_username(client):
-    from django.contrib.auth.models import User
-    from django.urls import reverse
-
-    User.objects.create_user(username="duplicate", password=os.getenv("TEST_PASSWORD", "testpass"))
-
-    response = client.post(
-        reverse("user_create"),
-        {
-            "username": "duplicate",
-            "password1": "12345test",
-            "password2": "12345test",
-        },
-    )
-
-    assert response.status_code == 200
 
 @pytest.mark.django_db
 def test_user_create_invalid_password(client):
@@ -157,6 +169,7 @@ def test_user_create_invalid_password(client):
     )
 
     assert response.status_code == 200
+
 
 @pytest.mark.django_db
 def test_user_create_password_mismatch(client):
