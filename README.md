@@ -21,13 +21,54 @@ The project includes:
 
 ## Requirements
 
-- Python 3.11+
-- Django
-- Poetry / pip
-- SQLite (default)
+- Python 3.12+
+- [uv](https://docs.astral.sh/uv/) (package manager)
+- PostgreSQL (production) or SQLite (default, development)
 
 ## Installation
 
-git clone https://github.com/Denwien/python-project-52.git
-cd python-project-52
-pip install -r requirements.txt
+    git clone https://github.com/Denwien/python-project-52.git
+    cd python-project-52
+
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
+if you don't have it:
+
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+
+Install dependencies, collect static files and apply migrations:
+
+    make build
+
+Or step by step:
+
+    make install       # install dependencies via uv
+    make collectstatic # collect static files
+    make migrate       # apply database migrations
+
+## Configuration
+
+Copy `.env.example` to `.env` and set the required variables:
+
+| Variable               | Description                        | Default          |
+|------------------------|------------------------------------|------------------|
+| `SECRET_KEY`           | Django secret key                  | `dev-secret-key` |
+| `DEBUG`                | Enable debug mode (True/False)     | `False`          |
+| `ALLOWED_HOSTS`        | Comma-separated list of hosts      | `localhost`      |
+| `DATABASE_URL`         | Database URL (e.g. postgres://...) | SQLite           |
+| `ROLLBAR_ACCESS_TOKEN` | Rollbar error tracking token       | —                |
+
+## Running
+
+    uv run python manage.py runserver
+
+## Testing
+
+    make test
+
+With coverage report:
+
+    make test-coverage
+
+## Linting
+
+    uv run ruff check .
