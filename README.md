@@ -5,7 +5,7 @@
 # python-project-52
 
 ### SonarCloud Quality Gate:
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Denwien_python-project-52&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Denwien_python-project-52)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Denwien_python-project-52&metric=alert_status&branch=main)](https://sonarcloud.io/summary/new_code?id=Denwien_python-project-52)
 
 ### Code Coverage:
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Denwien_python-project-52&metric=new_coverage)](https://sonarcloud.io/summary/new_code?id=Denwien_python-project-52)
