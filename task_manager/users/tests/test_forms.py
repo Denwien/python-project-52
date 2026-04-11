@@ -185,3 +185,20 @@ def test_user_create_password_mismatch(client):
     )
 
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_user_update_form_same_username():
+    user = User.objects.create_user(
+        username="sameuser",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
+    )
+    form = UserUpdateForm(
+        instance=user,
+        data={
+            "username": "sameuser",
+            "password1": "12345",
+            "password2": "12345",
+        },
+    )
+    assert form.is_valid()

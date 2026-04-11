@@ -382,3 +382,32 @@ def test_index_view(client):
 
     response = client.get(reverse("index"))
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_task_create_duplicate_name(client):
+    from django.contrib.auth.models import User
+    from django.urls import reverse
+
+    from task_manager.statuses.models import Status
+    from task_manager.tasks.models import Task
+
+    user = User.objects.create_user(
+        username="dup_user",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
+    )
+    status = Status.objects.create(name="dup_status")
+    Task.objects.create(
+        name="Existing Task",
+        status=status,
+        author=user,
+    )
+    client.login(
+        username="dup_user",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
+    )
+    response = client.post(
+        reverse("task_create"),
+        {"name": "Existing Task", "status": status.id},
+    )
+    assert response.status_code == 200

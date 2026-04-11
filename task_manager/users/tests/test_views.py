@@ -441,3 +441,78 @@ def test_delete_user_get_request(client, django_user_model):
     )
 
     assert response.status_code in (200, 302)
+
+
+@pytest.mark.django_db
+def test_update_other_user_forbidden_redirect(client):
+    owner = User.objects.create_user(
+        username="owner2",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
+    )
+    User.objects.create_user(
+        username="intruder",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
+    )
+    client.login(
+        username="intruder",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
+    )
+    response = client.post(
+        reverse("user_update", args=[owner.id]),
+        {
+            "username": "hacked",
+            "password1": "12345",
+            "password2": "12345",
+        },
+    )
+    assert response.status_code == 302
+    assert not User.objects.filter(username="hacked").exists()
+
+
+@pytest.mark.django_db
+def test_delete_other_user_forbidden_redirect(client):
+    owner = User.objects.create_user(
+        username="victim",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
+    )
+    User.objects.create_user(
+        username="attacker",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
+    )
+    client.login(
+        username="attacker",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
+    )
+    response = client.post(
+        reverse("user_delete", args=[owner.id]),
+    )
+    assert response.status_code == 302
+    assert User.objects.filter(username="victim").exists()
+
+
+@pytest.mark.django_db
+def test_delete_user_protected(client):
+    from task_manager.statuses.models import Status
+    from task_manager.tasks.models import Task
+
+    user = User.objects.create_user(
+        username="protected_user",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
+    )
+    client.login(
+        username="protected_user",
+        password=os.getenv("TEST_PASSWORD", "testpass"),
+    )
+    status = Status.objects.create(name="active_status")
+    Task.objects.create(
+        name="blocking_task",
+        status=status,
+        author=user,
+    )
+    response = client.post(
+        reverse("user_delete", args=[user.id]),
+    )
+    assert response.status_code == 302
+    assert User.objects.filter(
+        username="protected_user"
+    ).exists()
