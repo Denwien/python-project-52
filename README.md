@@ -1,21 +1,18 @@
 # python-project-52
 
-[![hexlet-check](https://github.com/Denwien/python-project-52/actions/workflows/hexlet-check.yml/badge.svg)]
-
-# python-project-52
-
-### SonarCloud Quality Gate:
+[![hexlet-check](https://github.com/Denwien/python-project-52/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Denwien/python-project-52/actions/workflows/hexlet-check.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Denwien_python-project-52&metric=alert_status&branch=main)](https://sonarcloud.io/summary/new_code?id=Denwien_python-project-52)
-
-### Code Coverage:
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Denwien_python-project-52&metric=new_coverage)](https://sonarcloud.io/summary/new_code?id=Denwien_python-project-52)
 
 ## Description
 
-Task Manager is a web application built with Django.  
-It allows users to create tasks, assign statuses, labels, and executors, as well as filter tasks by different criteria.
+Task Manager is a web application built with Django.
+
+It allows users to create tasks, assign statuses, labels and executors,
+as well as filter tasks by different criteria.
 
 The project includes:
+
 - user authentication
 - task management (CRUD)
 - task filtering
