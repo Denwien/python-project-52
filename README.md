@@ -31,7 +31,6 @@ The project includes:
 
 ## Installation
 
-```bash
 git clone https://github.com/Denwien/python-project-52.git
 cd python-project-52
 pip install -r requirements.txt
